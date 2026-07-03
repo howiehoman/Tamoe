@@ -1,27 +1,39 @@
-# macOS
+# macOS metadata
 .DS_Store
 
-# Xcode
+# Xcode user-specific files
+xcuserdata/
+*.xcuserstate
+*.xccheckout
+*.xcscmblueprint
+
+# Xcode build output
 DerivedData/
 build/
-*.xcuserstate
-xcuserdata/
 
-# Swift Package Manager
+# Swift Package Manager build output
 .build/
-Packages/
-Package.resolved
 
-# CocoaPods / Carthage
+# Dependency manager generated files
 Pods/
 Carthage/Build/
 
-# Fastlane
+# App archives and debug symbols
+*.ipa
+*.dSYM
+*.dSYM.zip
+*.xcarchive
+
+# Swift Playgrounds
+timeline.xctimeline
+playground.xcworkspace
+
+# Fastlane generated files
 fastlane/report.xml
 fastlane/Preview.html
-fastlane/screenshots/**/*.png
+fastlane/screenshots/
 fastlane/test_output/
 
-# Archives and logs
-*.xcarchive
+# Logs and editor swap files
 *.log
+*.swp
