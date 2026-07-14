@@ -1,39 +1,48 @@
 import SwiftUI
 
 struct TamoeCardStyle: ViewModifier {
-    var contentPadding: CGFloat = 20
+    var contentPadding: CGFloat = TamoeTheme.Spacing.medium
 
     func body(content: Content) -> some View {
         content
             .padding(contentPadding)
-            .background(.background, in: RoundedRectangle(cornerRadius: 20))
+            .background(
+                TamoeTheme.Colors.cardBackground,
+                in: RoundedRectangle(cornerRadius: TamoeTheme.Radius.card)
+            )
             .overlay {
-                RoundedRectangle(cornerRadius: 20)
-                    .stroke(Color.primary.opacity(0.08), lineWidth: 1)
+                RoundedRectangle(cornerRadius: TamoeTheme.Radius.card)
+                    .stroke(TamoeTheme.Colors.border, lineWidth: 1)
             }
-            .shadow(color: .black.opacity(0.08), radius: 12, y: 4)
+            .shadow(
+                color: TamoeTheme.Shadow.color,
+                radius: TamoeTheme.Shadow.radius,
+                y: TamoeTheme.Shadow.yOffset
+            )
     }
 }
 
 extension View {
-    func tamoeCard(contentPadding: CGFloat = 20) -> some View {
+    func tamoeCard(contentPadding: CGFloat = TamoeTheme.Spacing.medium) -> some View {
         modifier(TamoeCardStyle(contentPadding: contentPadding))
     }
 }
 
 #Preview {
-    VStack(alignment: .leading, spacing: 8) {
+    VStack(alignment: .leading, spacing: TamoeTheme.Spacing.small) {
         Text("Reception")
-            .font(.headline)
+            .font(TamoeTheme.Typography.cardTitle)
 
         Text("120/200 pax")
-            .font(.title2.bold())
+            .font(TamoeTheme.Typography.metric)
 
         Text("80 pax remaining")
+            .font(TamoeTheme.Typography.caption)
             .foregroundStyle(.secondary)
     }
+    .foregroundStyle(TamoeTheme.Colors.primaryText)
     .frame(maxWidth: .infinity, alignment: .leading)
     .tamoeCard()
-    .padding()
-    .background(Color.brown.opacity(0.08))
+    .padding(TamoeTheme.Spacing.large)
+    .background(TamoeTheme.Colors.pageBackground)
 }
