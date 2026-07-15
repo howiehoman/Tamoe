@@ -22,6 +22,13 @@ struct TamoeButtonStyle: ButtonStyle {
                 TamoeTheme.Colors.accent.opacity(isEnabled ? 1 : 0.4),
                 in: RoundedRectangle(cornerRadius: TamoeTheme.Radius.button)
             )
+            // Liquid Glass adds the iOS 26 highlight, depth, and interaction response.
+            .glassEffect(
+                .regular
+                    .tint(TamoeTheme.Colors.accent)
+                    .interactive(isEnabled),
+                in: RoundedRectangle(cornerRadius: TamoeTheme.Radius.button)
+            )
             .scaleEffect(configuration.isPressed ? 0.98 : 1)
             .animation(.easeOut(duration: 0.15), value: configuration.isPressed)
     }
