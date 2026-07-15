@@ -64,34 +64,26 @@ struct QuotaSummaryCard<AllocationContent: View>: View {
     /// Builds one large accessible button matching the dashboard reference.
     var body: some View {
         Button(action: onTap) {
-            VStack(alignment: .leading, spacing: TamoeTheme.Spacing.large) {
-                cardHeader
+                    VStack(alignment: .leading, spacing: TamoeTheme.Spacing.large) {
+                        cardHeader
 
-                allocationContent
-                    .frame(maxWidth: .infinity)
-                    .accessibilityHidden(true)
+                        allocationContent
+                            .frame(maxWidth: .infinity)
+                            .accessibilityHidden(true)
 
-                progressSection
+                        progressSection
 
-                PrioritySummary(priorityPax: priorityPax)
-            }
-            .padding(TamoeTheme.Spacing.large)
-            .foregroundStyle(TamoeTheme.Colors.primaryText)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .background(
-                TamoeTheme.Colors.cardBackground,
-                in: RoundedRectangle(cornerRadius: TamoeTheme.Radius.card)
-            )
-            .shadow(
-                color: TamoeTheme.Shadow.color,
-                radius: TamoeTheme.Shadow.radius,
-                y: TamoeTheme.Shadow.yOffset
-            )
-        }
-        .buttonStyle(.plain)
-        .accessibilityElement(children: .ignore)
-        .accessibilityLabel(accessibilityLabel)
-        .accessibilityHint("Opens the detailed guest list.")
+                        PrioritySummary(priorityPax: priorityPax)
+                    }
+                    .foregroundStyle(TamoeTheme.Colors.primaryText)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    // MEMANGGIL COMPONENT YANG SUDAH ADA
+                    .tamoeCard(contentPadding: TamoeTheme.Spacing.large)
+                }
+                .buttonStyle(.plain)
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel(accessibilityLabel)
+                .accessibilityHint("Opens the detailed guest list.")
     }
 
     /// Places scope context on the left and quota status on the right.
@@ -178,13 +170,14 @@ struct QuotaSummaryCard<AllocationContent: View>: View {
         allocationAccessibilitySummary: "Bride's 20 pax, Groom's 20 pax",
         onTap: {}
     ) {
-        Circle()
-            .stroke(TamoeTheme.Colors.progressTrack, lineWidth: 24)
-            .frame(width: 220, height: 220)
-            .overlay {
-                Text("Allocations")
-                    .font(TamoeTheme.Typography.cardTitle)
-            }
+        AllocationDonutChart(
+                segments: [
+                    AllocationSegment(id: UUID(), value: 20, colorHex: "#4CAF50"),
+                    AllocationSegment(id: UUID(), value: 20, colorHex: "#2196F3")
+                ],
+                donutThickness: 0.85
+            )
+            .frame(maxHeight: 200)
     }
     .padding(TamoeTheme.Spacing.large)
     .background(TamoeTheme.Colors.pageBackground)
