@@ -28,12 +28,10 @@ struct CategorySummaryCard: View {
                 
                 Spacer(minLength: TamoeTheme.Spacing.small)
                 
-                QuotaWarningBadge(
-                    actualPax: actualPax,
-                    limitPax: limitPax,
-                    scopeLabel: categoryName,
-                    presentation: .compactRatio
-                )
+                Text("\(actualPax)/\(limitPax)")
+                    .font(TamoeTheme.Typography.label)
+                    .monospacedDigit()
+                    .foregroundStyle(TamoeTheme.Colors.primaryText)
             }
             
             PaxProgressView(
