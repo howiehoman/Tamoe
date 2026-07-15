@@ -8,9 +8,7 @@ struct OpeningView: View {
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            Spacer()
-
+        VStack(spacing: 0) {
             VStack(alignment: .leading, spacing: TamoeTheme.Spacing.small) {
                 Text("Every wedding is")
                     .font(TamoeTheme.Typography.body)
@@ -27,16 +25,18 @@ struct OpeningView: View {
                 .padding(.top, TamoeTheme.Spacing.extraSmall)
             }
             .accessibilityElement(children: .combine)
-
-            Spacer()
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .frame(maxHeight: .infinity, alignment: .leading)
+            .padding(.horizontal, TamoeTheme.Spacing.large)
 
             Button("Next", action: onNext)
                 .buttonStyle(.tamoePrimary)
+                .frame(maxWidth: 346)
+                .padding(.horizontal, TamoeTheme.Spacing.large)
+                .padding(.bottom, 38)
                 .accessibilityHint("Continues to wedding event setup")
         }
         .foregroundStyle(TamoeTheme.Colors.primaryText)
-        .padding(.horizontal, TamoeTheme.Spacing.large)
-        .padding(.vertical, TamoeTheme.Spacing.medium)
         .background(TamoeTheme.Colors.pageBackground.ignoresSafeArea())
     }
 }

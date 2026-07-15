@@ -26,27 +26,38 @@ struct EventSetupView: View {
     }
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: TamoeTheme.Spacing.large) {
-                header
-                eventRows
-                validationSummary
+        GeometryReader { proxy in
+            VStack(spacing: 0) {
+                ScrollView {
+                    VStack(alignment: .leading, spacing: TamoeTheme.Spacing.large) {
+                        header
+                        eventRows
+                        validationSummary
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.horizontal, TamoeTheme.Spacing.large)
+                    .frame(
+                        minHeight: max(
+                            proxy.size.height
+                                - TamoeTheme.Size.minimumTapTarget
+                                - 38,
+                            0
+                        ),
+                        alignment: .center
+                    )
+                }
+                .scrollDismissesKeyboard(.interactively)
+
+                Button("Submit", action: onSubmit)
+                    .buttonStyle(.tamoePrimary)
+                    .frame(maxWidth: 346)
+                    .disabled(isSubmitting)
+                    .padding(.horizontal, TamoeTheme.Spacing.large)
+                    .padding(.bottom, 38)
             }
-            .padding(.horizontal, TamoeTheme.Spacing.large)
-            .padding(.top, TamoeTheme.Spacing.extraLarge)
-            .padding(.bottom, TamoeTheme.Spacing.large)
         }
-        .scrollDismissesKeyboard(.interactively)
         .foregroundStyle(TamoeTheme.Colors.primaryText)
         .background(TamoeTheme.Colors.pageBackground.ignoresSafeArea())
-        .safeAreaInset(edge: .bottom) {
-            Button("Submit", action: onSubmit)
-                .buttonStyle(.tamoePrimary)
-                .disabled(isSubmitting)
-                .padding(.horizontal, TamoeTheme.Spacing.large)
-                .padding(.vertical, TamoeTheme.Spacing.medium)
-                .background(TamoeTheme.Colors.pageBackground)
-        }
     }
 
     private var header: some View {
