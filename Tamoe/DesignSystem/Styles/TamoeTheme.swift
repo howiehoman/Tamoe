@@ -12,6 +12,11 @@ enum TamoeTheme {
             green: 145 / 255,
             blue: 106 / 255
         )
+        static let fieldBackground = Color(
+            red: 231 / 255,
+            green: 223 / 255,
+            blue: 206 / 255
+        )
         static let onAccent = Color.white
         static let pageBackground = accent.opacity(0.08)
         static let cardBackground = Color(uiColor: .systemBackground)
@@ -49,6 +54,7 @@ enum TamoeTheme {
     enum Radius {
         static let button: CGFloat = 14
         static let card: CGFloat = 20
+        static let field: CGFloat = 12
     }
 
     enum Shadow {
