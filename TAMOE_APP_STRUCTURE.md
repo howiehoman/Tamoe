@@ -265,12 +265,12 @@ flowchart TD
 
 - Title: `All`.
 - Top-right total: `{actualPax}/{capacityPax} pax`, initially `0/{capacityPax} pax`.
-- Concentric allocation chart:
-  - Outer ring: category quota allocation by category color.
-  - Neutral outer segment: capacity not allocated to any category.
-  - Inner ring: actual household pax assigned to each category using the same colors.
-  - Neutral inner segment: remaining event capacity while actual pax are below capacity.
-  - When actual pax exceed capacity, the inner ring is visually capped at a full circle while the numeric overflow and warning communicate the excess.
+- Allocation donut chart:
+  - One segment per category quota for the selected event, using the category color.
+  - Each category fraction is its quota divided by the selected event's capacity.
+  - The neutral segment is event capacity not yet allocated to any category.
+  - The donut is quota-only; adding, editing, moving, or deleting guests does not change it.
+  - Actual invited pax remain visible through the numeric total, overall progress bar, priority totals, category cards, and overflow warnings.
 - Overall progress bar based on actual pax divided by event capacity.
 - Priority totals for Must-Invite, Maybe, and Optional, measured in pax.
 - Tapping the card opens Detailed Guest List with `.all` scope for the selected event.
@@ -867,7 +867,6 @@ enum PriorityFilter: String, Hashable, CaseIterable, Sendable {
 enum AllocationSegmentID: Hashable, Sendable {
     case category(UUID)
     case unallocated
-    case remaining
 }
 
 struct AllocationSegment: Identifiable, Equatable, Sendable {
@@ -893,8 +892,7 @@ struct DashboardMetrics: Equatable, Sendable {
     let overflowPax: Int
     let priorityPax: [PriorityLevel: Int]
     let categories: [CategoryMetrics]
-    let quotaRingSegments: [AllocationSegment]
-    let actualRingSegments: [AllocationSegment]
+    let allocationSegments: [AllocationSegment]
 }
 
 struct CategoryMetrics: Identifiable, Equatable, Sendable {
@@ -920,14 +918,11 @@ unallocatedPax(E) = max(event.capacityPax - allocatedPax(E), 0)
 remainingPax(E) = max(event.capacityPax - eventActualPax(E), 0)
 eventOverflowPax(E) = max(eventActualPax(E) - event.capacityPax, 0)
 categoryOverflowPax(E, C) = max(categoryActualPax(E, C) - categoryQuota(E, C), 0)
-quotaRingFraction(E, C) = categoryQuota(E, C) / event.capacityPax
-quotaRingUnallocatedFraction(E) = unallocatedPax(E) / event.capacityPax
-actualRingDenominator(E) = max(eventActualPax(E), event.capacityPax)
-actualRingFraction(E, C) = categoryActualPax(E, C) / actualRingDenominator(E)
-actualRingRemainingFraction(E) = remainingPax(E) / actualRingDenominator(E)
+allocationRingFraction(E, C) = categoryQuota(E, C) / event.capacityPax
+allocationRingUnallocatedFraction(E) = unallocatedPax(E) / event.capacityPax
 ```
 
-Active event capacity is always greater than zero, so the ring denominators are nonzero. When actual pax are under capacity, category fractions plus the neutral remaining fraction fill one inner circle. When actual pax exceed capacity, the denominator becomes actual pax, the neutral remaining fraction becomes zero, and the category fractions show the distribution of all invited pax across one full circle. Numeric values and warnings communicate the overflow. Progress views likewise clamp visual fill to `0...1` while retaining true numeric overflow.
+Active event capacity is always greater than zero, so the allocation-ring denominator is nonzero. Category quota fractions plus the neutral unallocated fraction fill one donut. The donut changes only when category quotas or the selected event change. Actual invited pax do not affect the donut; progress views clamp visual fill to `0...1` while numeric values and warnings retain true overflow.
 
 ## 11. Repository Contracts
 
@@ -1172,7 +1167,7 @@ IDs are passed through routes instead of SwiftData model instances. The destinat
 | `EventSlotRow` | Event slot draft, field errors, editability | Activation, name, and capacity bindings. |
 | `EventSegmentedPicker` | Ordered active events, selected event ID | Emits selected stable event ID. |
 | `QuotaSummaryCard` | Title, actual pax, quota/capacity, metrics | Emits card tap. |
-| `AllocationDonutChart` | Quota segments, actual segments, capacity, overflow | Visual-only; exposes a complete accessibility summary. |
+| `AllocationDonutChart` | Category quota segments and event capacity | Quota-only visual; exposes allocated, unallocated, and per-category pax to accessibility. |
 | `PrioritySummary` | Pax totals for all three priorities | Visual-only summary. |
 | `CategorySummaryCard` | `CategoryMetrics` | Emits category tap. |
 | `CategoryEventQuotaRow` | Event name, enabled state, quota text, errors | Checkbox and quota edits. |
@@ -1191,7 +1186,7 @@ Shared components receive display values and callbacks. They do not fetch models
 
 - Support Dynamic Type without truncating essential names, pax values, or actions.
 - Every checkbox, toggle, menu, stepper, chart, progress bar, and swipe alternative has a VoiceOver label, value, and hint.
-- Chart information must also be available as text, for example: `Reception, 120 of 200 pax invited, 80 pax remaining`.
+- Chart information must also be available as text, for example: `Reception allocations, 150 of 200 pax allocated, 50 pax unallocated`.
 - Overflow must use a warning icon and text/value in addition to red.
 - Tap targets meet Apple's minimum recommended size.
 - Event/category names, address, and notes use a standard text keyboard.
@@ -1233,7 +1228,7 @@ Shared components receive display values and callbacks. They do not fetch models
 - Category actual totals include only assignments for that category and event.
 - Allocated, unallocated, remaining, and overflow formulas handle zero actual, exact capacity, under-capacity, and over-capacity cases.
 - Progress values clamp visually while retaining true numeric overflow.
-- Quota and actual ring segments use the same category identity/color ordering.
+- Allocation donut segments use deterministic category identity/color ordering and leave unallocated capacity neutral.
 
 ### 18.3 SwiftData repository tests
 
