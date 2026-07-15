@@ -17,8 +17,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		A10000000000000000000001 /* TamoeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TamoeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		961D5CA52FF7AA9E00F4BCF4 /* Tamoe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tamoe.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A10000000000000000000001 /* TamoeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TamoeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */

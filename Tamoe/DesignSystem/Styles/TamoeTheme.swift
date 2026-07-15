@@ -22,6 +22,11 @@ enum TamoeTheme {
         )
 
         /// The foreground color placed on the warm tan accent.
+        static let fieldBackground = Color(
+            red: 231 / 255,
+            green: 223 / 255,
+            blue: 206 / 255
+        )
         static let onAccent = Color.white
 
         /// The lightly tinted background behind full app screens.
@@ -158,6 +163,7 @@ enum TamoeTheme {
         static let button: CGFloat = 14
         static let card: CGFloat = 20
         static let compactControl: CGFloat = 12
+        static let field: CGFloat = 12
     }
 
     /// Contains the shared shadow treatment for elevated surfaces.
